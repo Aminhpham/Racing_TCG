@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="register-container">
+    <h1>Create Account</h1>
+
+    <form method="POST" action="{{ url_for('auth.register') }}">
+        <input type="text" name="username" placeholder="Username" required>
+
+        <input type="email" name="email" placeholder="Email" required>
+
+        <input type="password" name="password" placeholder="Password" required>
+
+        <button type="submit">Create Account</button>
+
+        <a href="{{ url_for('auth.login') }}" class="login-redirect">Already have an account</a>
+    </form>
+</div>
+
+{% endblock %}
