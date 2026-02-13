@@ -1,0 +1,94 @@
+/* Lobby Browser Styles */
+.lobby-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.lobby-container h1 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.deck-selection,
+.create-lobby-section,
+.lobby-list-section {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.deck-selection h2,
+.create-lobby-section h2,
+.lobby-list-section h2 {
+    margin-top: 0;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(0, 0, 0, 0.3);
+    color: white;
+    font-size: 1em;
+    margin: 10px 0;
+}
+
+.form-group {
+    margin: 15px 0;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.lobby-card {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 15px;
+    margin: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.2s;
+}
+
+.lobby-card:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.lobby-info h4 {
+    margin: 0 0 5px 0;
+}
+
+.lobby-info p {
+    margin: 0;
+    opacity: 0.8;
+}
+
+.join-lobby-btn {
+    padding: 10px 20px;
+}
+
+#password-modal .modal-content {
+    min-width: 300px;
+}
+
+#password-modal input {
+    margin: 15px 0;
+}
+
+#password-modal button {
+    margin: 5px;
+}
+
+.text-warning {
+    color: #ff9800;
+}
+
+.text-muted {
+    color: #999;
+}

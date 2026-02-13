@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Portal - Racing TCG{% endblock %}
+
+{% block content %}
+<div class="portal-container" style="max-width: 1200px; margin: 0 auto; padding: 40px 20px;">
+    <h1 style="text-align: center; margin-bottom: 40px;">Welcome to Racing TCG</h1>
+
+    <div class="portal-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+
+        <div class="portal-card" style="background: rgba(255, 255, 255, 0.1); padding: 30px; border-radius: 10px; text-align: center;">
+            <h2>🏁 Play Multiplayer</h2>
+            <p>Join or create a lobby to race against other players!</p>
+            <a href="{{ url_for('matchmaking.lobby_browser') }}" class="btn btn-primary" style="display: inline-block; padding: 12px 24px; background: #4CAF50; color: white; text-decoration: none; border-radius: 5px; margin-top: 15px;">Find a Match</a>
+        </div>
+
+        <div class="portal-card" style="background: rgba(255, 255, 255, 0.1); padding: 30px; border-radius: 10px; text-align: center;">
+            <h2>🎴 Manage Decks</h2>
+            <p>Build and customize your racing deck.</p>
+            <a href="{{ url_for('decks.index') }}" class="btn btn-primary" style="display: inline-block; padding: 12px 24px; background: #2196F3; color: white; text-decoration: none; border-radius: 5px; margin-top: 15px;">My Decks</a>
+        </div>
+
+        <div class="portal-card" style="background: rgba(255, 255, 255, 0.1); padding: 30px; border-radius: 10px; text-align: center;">
+            <h2>📋 Card Collection</h2>
+            <p>Browse all available cards.</p>
+            <a href="{{ url_for('cards.index') }}" class="btn btn-primary" style="display: inline-block; padding: 12px 24px; background: #FF9800; color: white; text-decoration: none; border-radius: 5px; margin-top: 15px;">View Cards</a>
+        </div>
+
+    </div>
+
+    <div style="text-align: center; margin-top: 40px;">
+        <p style="opacity: 0.7;">Logged in as: <strong>{{ current_user.username }}</strong></p>
+        <a href="{{ url_for('auth.logout') }}" style="color: #f44336;">Logout</a>
+    </div>
+</div>
+{% endblock %}

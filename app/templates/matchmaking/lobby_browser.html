@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Find a Match - Racing TCG{% endblock %}
+
+{% block content %}
+<div class="lobby-container">
+    <h1>Multiplayer Matchmaking</h1>
+
+    <!-- Deck Selection -->
+    <div class="deck-selection">
+        <h2>Select Your Deck</h2>
+        {% if decks %}
+            <select id="deck-selector" class="form-control">
+                <option value="">Choose a deck...</option>
+                {% for deck in decks %}
+                    <option value="{{ deck.id }}">{{ deck.name }} ({{ deck.card_ids|length }} cards)</option>
+                {% endfor %}
+            </select>
+        {% else %}
+            <p class="text-warning">You don't have any decks yet. <a href="{{ url_for('decks.index') }}">Create one first!</a></p>
+        {% endif %}
+    </div>
+
+    <!-- Create Lobby -->
+    <div class="create-lobby-section">
+        <h2>Create New Game</h2>
+        <form id="create-lobby-form">
+            <div class="form-group">
+                <label for="lobby-name">Lobby Name:</label>
+                <input type="text" id="lobby-name" class="form-control" placeholder="My Awesome Race" required>
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="is-private"> Private Lobby
+                </label>
+            </div>
+
+            <div class="form-group" id="password-group" style="display: none;">
+                <label for="lobby-password">Password:</label>
+                <input type="text" id="lobby-password" class="form-control" placeholder="Enter password">
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="create-lobby-btn" disabled>Create Lobby</button>
+        </form>
+    </div>
+
+    <!-- Lobby List -->
+    <div class="lobby-list-section">
+        <h2>Available Games</h2>
+        <div id="lobby-list">
+            <p class="text-muted">Loading lobbies...</p>
+        </div>
+    </div>
+
+    <!-- Join Password Modal -->
+    <div id="password-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3>Enter Password</h3>
+            <input type="password" id="join-password" class="form-control" placeholder="Lobby password">
+            <button id="join-with-password-btn" class="btn btn-primary">Join</button>
+            <button id="cancel-join-btn" class="btn btn-secondary">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/socketio.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/lobby_browser.js') }}"></script>
+{% endblock %}

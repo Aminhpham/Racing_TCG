@@ -1,7 +1,6 @@
 from datetime import datetime
 from app import db
-from sqlalchemy.dialects.postgresql import ARRAY, Integer
-
+from sqlalchemy import ARRAY, Integer
 
 class Deck(db.Model):
     __tablename__ = "decks"
@@ -10,5 +9,5 @@ class Deck(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text)
-    card_ids = db.Column(ARRAY(Integer))  # list of card IDs
+    card_ids = db.Column(ARRAY(Integer))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)

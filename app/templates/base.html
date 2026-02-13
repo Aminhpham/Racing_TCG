@@ -1,20 +1,56 @@
-<!-- html -->
-        <head>
-            <meta charset="UTF-8">
-            <title>TCG Maker</title>
-            <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css')}}">
-        </head>
-        <body>
-            <nav>
-                <a href="/">Home</a>
-                <a href="/about">About</a>
-                <a href="/howtoplay">How to Play</a>
-                <a href="/login" class="login-btn">Login</a>
-            </nav>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Racing TCG{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/lobby.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/game.css')}}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body {% if request.endpoint and 'auth' in request.endpoint %}class="auth-page"{% endif %}>
+    {% if current_user.is_authenticated and request.endpoint and 'auth' not in request.endpoint %}
+    <nav style="background: rgba(0, 0, 0, 0.3); backdrop-filter: blur(10px); padding: 15px 30px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); position: sticky; top: 0; z-index: 100;">
+        <div style="max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; gap: 25px; align-items: center;">
+                <a href="{{ url_for('portal.index') }}" style="color: white; text-decoration: none; font-weight: 700; font-size: 1.3em; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">🏎️ Racing TCG</a>
+                <div style="display: flex; gap: 20px;">
+                    <a href="{{ url_for('portal.index') }}" style="color: white; text-decoration: none; font-weight: 500; transition: color 0.2s;">Portal</a>
+                    <a href="{{ url_for('cards.index') }}" style="color: white; text-decoration: none; font-weight: 500; transition: color 0.2s;">Cards</a>
+                    <a href="{{ url_for('decks.index') }}" style="color: white; text-decoration: none; font-weight: 500; transition: color 0.2s;">Decks</a>
+                    <a href="{{ url_for('matchmaking.lobby_browser') }}" style="color: white; text-decoration: none; font-weight: 500; transition: color 0.2s;">Play</a>
+                </div>
+            </div>
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <span style="color: rgba(255, 255, 255, 0.7); font-size: 0.9em;">{{ current_user.username }}</span>
+                <a href="{{ url_for('auth.logout') }}" style="color: #f44336; text-decoration: none; font-weight: 500; transition: color 0.2s;">Logout</a>
+            </div>
+        </div>
+    </nav>
+    {% endif %}
 
-            <main>
-                {% block content %}
-                {% endblock %}
-            </main>
-        </body>
-        </html>
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flash-messages">
+            {% for category, message in messages %}
+            <div class="flash {{ category }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    {% endwith %}
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

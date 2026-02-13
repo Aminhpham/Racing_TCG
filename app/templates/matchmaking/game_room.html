@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block title %}Game Room - Racing TCG{% endblock %}
+
+{% block content %}
+<div id="game-container" data-match-id="{{ match_id }}">
+    <!-- Opponent's Area -->
+    <div id="opponent-area" class="player-area">
+        <div class="player-info">
+            <h3 id="opponent-name">Opponent</h3>
+            <div class="stats-grid">
+                <div class="stat">
+                    <span class="stat-label">Engine:</span>
+                    <span id="opp-engine" class="stat-value">0</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Tires:</span>
+                    <span id="opp-tires" class="stat-value">0</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Fuel:</span>
+                    <span id="opp-fuel" class="stat-value">0</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Reliability:</span>
+                    <span id="opp-reliability" class="stat-value">0</span>
+                </div>
+            </div>
+            <div class="progress-display">
+                <strong>Lap <span id="opp-lap">1</span>/8</strong>
+                <div class="progress-bar">
+                    <div id="opp-progress-fill" class="progress-fill" style="width: 0%"></div>
+                </div>
+                <span id="opp-progress">0</span>/10
+            </div>
+            <div class="hand-info">
+                Cards in hand: <span id="opp-hand-count">5</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Race Track Visualization -->
+    <div id="race-track">
+        <div class="track-section">
+            <div id="opponent-car" class="car car-opponent">🏎️</div>
+            <div id="player-car" class="car car-player">🏁</div>
+        </div>
+    </div>
+
+    <!-- Phase Indicator -->
+    <div id="phase-indicator">
+        <h2 id="phase-text">Connecting...</h2>
+        <p id="phase-description">Waiting for game state...</p>
+        <div class="turn-info">
+            Turn: <span id="turn-number">1</span>
+            <span id="leader-indicator"></span>
+            <div id="turn-indicator" class="turn-indicator" style="display: none;"></div>
+        </div>
+    </div>
+
+    <!-- Player's Area -->
+    <div id="player-area" class="player-area">
+        <div class="player-info">
+            <h3>You</h3>
+            <div class="stats-grid">
+                <div class="stat">
+                    <span class="stat-label">Engine:</span>
+                    <span id="player-engine" class="stat-value">0</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Tires:</span>
+                    <span id="player-tires" class="stat-value">0</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Fuel:</span>
+                    <span id="player-fuel" class="stat-value">0</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Reliability:</span>
+                    <span id="player-reliability" class="stat-value">0</span>
+                </div>
+            </div>
+            <div class="progress-display">
+                <strong>Lap <span id="player-lap">1</span>/8</strong>
+                <div class="progress-bar">
+                    <div id="player-progress-fill" class="progress-fill" style="width: 0%"></div>
+                </div>
+                <span id="player-progress">0</span>/10
+            </div>
+            <div class="resources">
+                Resources: <span id="player-resources">5</span>/5
+            </div>
+        </div>
+
+        <!-- Player's Hand -->
+        <div id="hand-area">
+            <h4>Your Hand</h4>
+            <div id="hand-cards" class="card-container"></div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div id="action-buttons">
+            <button id="ready-btn" class="btn btn-primary" style="display:none;">Ready for Reveal</button>
+            <button id="pass-btn" class="btn btn-secondary" style="display:none;">Pass</button>
+            <button id="pit-stop-btn" class="btn btn-warning" style="display:none;">Pit Stop</button>
+        </div>
+    </div>
+
+    <!-- Game Log -->
+    <div id="game-log">
+        <h4>Game Log</h4>
+        <div id="log-messages"></div>
+    </div>
+
+    <!-- Game Over Modal -->
+    <div id="game-over-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2 id="game-over-title">Game Over</h2>
+            <p id="game-over-message"></p>
+            <a href="{{ url_for('matchmaking.lobby_browser') }}" class="btn btn-primary">Return to Lobby</a>
+        </div>
+    </div>
+
+    <!-- Strategy Reveal Overlay -->
+    <div id="reveal-overlay" class="overlay" style="display: none;">
+        <div class="reveal-content">
+            <h2>Strategy Cards Revealed!</h2>
+            <div class="reveal-grid">
+                <div class="reveal-card">
+                    <h3>Your Card</h3>
+                    <div id="reveal-player-card"></div>
+                    <div id="reveal-player-changes"></div>
+                </div>
+                <div class="reveal-card">
+                    <h3>Opponent's Card</h3>
+                    <div id="reveal-opponent-card"></div>
+                    <div id="reveal-opponent-changes"></div>
+                </div>
+            </div>
+            <p class="reveal-continue">Starting React Phase...</p>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/socketio.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/card_renderer.js') }}"></script>
+<script src="{{ url_for('static', filename='js/game_room.js') }}"></script>
+{% endblock %}
