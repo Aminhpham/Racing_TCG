@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}My Decks - Racing TCG{% endblock %}
+
+{% block content %}
+<div class="decks-container" style="max-width: 1400px; margin: 0 auto; padding: 40px 20px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
+        <h1>🎴 My Decks</h1>
+        <a href="{{ url_for('decks.create') }}" class="btn" style="display: inline-block; padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">+ Create New Deck</a>
+    </div>
+
+    {% if decks %}
+    <div class="deck-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 25px;">
+        {% for deck in decks %}
+        <div class="deck-card" style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%); border: 2px solid rgba(102, 126, 234, 0.5); border-radius: 12px; padding: 25px; transition: all 0.3s ease; cursor: pointer;" onclick="window.location='{{ url_for('decks.view', deck_id=deck.id) }}'">
+            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
+                <h3 style="margin: 0; color: #FFD700; font-size: 1.4em;">{{ deck.name }}</h3>
+                <span style="background: rgba(255, 215, 0, 0.2); padding: 5px 12px; border-radius: 15px; font-size: 0.85em; color: #FFD700;">{{ deck.card_ids|length if deck.card_ids else 0 }} cards</span>
+            </div>
+
+            {% if deck.description %}
+            <p style="color: rgba(255, 255, 255, 0.8); margin: 15px 0; line-height: 1.6;">{{ deck.description }}</p>
+            {% else %}
+            <p style="color: rgba(255, 255, 255, 0.5); margin: 15px 0; font-style: italic;">No description</p>
+            {% endif %}
+
+            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.2);">
+                <div style="font-size: 0.9em; opacity: 0.8; margin-bottom: 12px;">
+                    {% if deck.card_ids and deck.card_ids|length >= 40 %}
+                    <span style="color: #4CAF50;">✓ Ready to play</span>
+                    {% elif deck.card_ids and deck.card_ids|length > 0 %}
+                    <span style="color: #FF9800;">⚠ {{ 40 - deck.card_ids|length }} cards needed</span>
+                    {% else %}
+                    <span style="color: #f44336;">Empty deck</span>
+                    {% endif %}
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <a href="{{ url_for('decks.edit', deck_id=deck.id) }}" class="btn-small" style="flex: 1; padding: 8px 16px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none; border-radius: 5px; font-size: 0.9em; transition: all 0.3s; text-align: center;" onclick="event.stopPropagation();">✏️ Edit</a>
+                    <a href="{{ url_for('decks.view', deck_id=deck.id) }}" class="btn-small" style="flex: 1; padding: 8px 16px; background: rgba(255, 255, 255, 0.1); color: white; text-decoration: none; border-radius: 5px; font-size: 0.9em; transition: background 0.3s; text-align: center;" onclick="event.stopPropagation();">View →</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div style="text-align: center; padding: 60px 20px; background: rgba(255, 255, 255, 0.05); border-radius: 12px; border: 2px dashed rgba(255, 255, 255, 0.2);">
+        <div style="font-size: 4em; margin-bottom: 20px; opacity: 0.3;">🎴</div>
+        <h2 style="color: rgba(255, 255, 255, 0.7); margin-bottom: 15px;">No decks yet</h2>
+        <p style="color: rgba(255, 255, 255, 0.5); margin-bottom: 25px;">Create your first deck to start racing!</p>
+        <a href="{{ url_for('decks.create') }}" class="btn" style="display: inline-block; padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">+ Create Deck</a>
+    </div>
+    {% endif %}
+
+    <div style="text-align: center; margin-top: 40px;">
+        <a href="{{ url_for('portal.index') }}" class="btn" style="display: inline-block; padding: 12px 24px; background: rgba(255, 255, 255, 0.1); color: white; text-decoration: none; border-radius: 5px;">Back to Portal</a>
+    </div>
+</div>
+
+<style>
+.deck-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(102, 126, 234, 0.4);
+    border-color: rgba(102, 126, 234, 0.8);
+}
+
+.btn-small:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+}
+</style>
+{% endblock %}

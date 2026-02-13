@@ -2,6 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
+from flask_socketio import SocketIO
 from config import Config
 
 # Extensions (initialized here, used everywhere)
@@ -9,6 +10,7 @@ db = SQLAlchemy()
 migrate = Migrate()
 login_manager = LoginManager()
 login_manager.login_view = "auth.login"   # redirect for @login_required
+socketio = SocketIO()
 
 
 def create_app():
@@ -19,16 +21,23 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
     login_manager.init_app(app)
+    socketio.init_app(app, cors_allowed_origins="*", async_mode='threading', manage_session=False)
 
     # Register blueprints
     from app.routes.auth import auth_bp
     from app.routes.portal import portal_bp
     from app.routes.decks import decks_bp
     from app.routes.cards import cards_bp
+    from app.routes.matchmaking import matchmaking_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(portal_bp)
     app.register_blueprint(decks_bp)
     app.register_blueprint(cards_bp)
+    app.register_blueprint(matchmaking_bp)
+
+    # Register SocketIO events
+    from app.sockets import register_socket_events
+    register_socket_events(socketio)
 
     return app

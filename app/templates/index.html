@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome - Racing TCG{% endblock %}
+
+{% block content %}
+<div class="landing-container" style="max-width: 1200px; margin: 0 auto; padding: 60px 20px; text-align: center;">
+    <div style="margin-bottom: 50px;">
+        <h1 style="font-size: 3.5em; margin-bottom: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">🏎️ Racing TCG</h1>
+        <p style="font-size: 1.3em; color: rgba(255, 255, 255, 0.8); max-width: 700px; margin: 0 auto; line-height: 1.6;">
+            Experience the thrill of competitive racing in this strategy-based trading card game. Build your deck, manage your resources, and race to victory!
+        </p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin: 50px 0;">
+        <div class="feature-card" style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%); border: 2px solid rgba(102, 126, 234, 0.5); border-radius: 12px; padding: 35px; transition: transform 0.3s, box-shadow 0.3s;" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 12px 24px rgba(102, 126, 234, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+            <div style="font-size: 3em; margin-bottom: 15px;">🎴</div>
+            <h3 style="color: #FFD700; margin-bottom: 15px;">Strategic Depth</h3>
+            <p style="color: rgba(255, 255, 255, 0.8); line-height: 1.6;">
+                Choose from Strategy, Tactics, and Event cards. Manage your car's Engine, Tires, Fuel, and Reliability to outpace your opponents.
+            </p>
+        </div>
+
+        <div class="feature-card" style="background: linear-gradient(135deg, rgba(76, 175, 80, 0.2) 0%, rgba(69, 160, 73, 0.2) 100%); border: 2px solid rgba(76, 175, 80, 0.5); border-radius: 12px; padding: 35px; transition: transform 0.3s, box-shadow 0.3s;" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 12px 24px rgba(76, 175, 80, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+            <div style="font-size: 3em; margin-bottom: 15px;">⚡</div>
+            <h3 style="color: #4CAF50; margin-bottom: 15px;">Real-Time Multiplayer</h3>
+            <p style="color: rgba(255, 255, 255, 0.8); line-height: 1.6;">
+                Challenge players in real-time 1v1 matches. Race through 8 laps, make split-second decisions, and claim victory!
+            </p>
+        </div>
+
+        <div class="feature-card" style="background: linear-gradient(135deg, rgba(255, 152, 0, 0.2) 0%, rgba(230, 137, 0, 0.2) 100%); border: 2px solid rgba(255, 152, 0, 0.5); border-radius: 12px; padding: 35px; transition: transform 0.3s, box-shadow 0.3s;" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 12px 24px rgba(255, 152, 0, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+            <div style="font-size: 3em; margin-bottom: 15px;">🏁</div>
+            <h3 style="color: #FF9800; margin-bottom: 15px;">Build Your Deck</h3>
+            <p style="color: rgba(255, 255, 255, 0.8); line-height: 1.6;">
+                Craft the perfect 40-card deck. Choose your car, select your strategy cards, and customize your playstyle for victory.
+            </p>
+        </div>
+    </div>
+
+    <div style="margin-top: 60px;">
+        {% if current_user.is_authenticated %}
+        <a href="{{ url_for('portal.index') }}" class="btn" style="display: inline-block; padding: 16px 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 1.2em; margin: 0 10px; box-shadow: 0 6px 12px rgba(102, 126, 234, 0.4);">
+            Enter Portal
+        </a>
+        {% else %}
+        <a href="{{ url_for('auth.login') }}" class="btn" style="display: inline-block; padding: 16px 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 1.2em; margin: 0 10px; box-shadow: 0 6px 12px rgba(102, 126, 234, 0.4);">
+            Login
+        </a>
+        <a href="{{ url_for('auth.register') }}" class="btn" style="display: inline-block; padding: 16px 40px; background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%); color: white; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 1.2em; margin: 0 10px; box-shadow: 0 6px 12px rgba(76, 175, 80, 0.4);">
+            Register
+        </a>
+        {% endif %}
+    </div>
+
+    <div style="margin-top: 80px; padding-top: 40px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+        <h2 style="color: rgba(255, 255, 255, 0.9); margin-bottom: 30px;">How It Works</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 25px; max-width: 900px; margin: 0 auto;">
+            <div>
+                <div style="width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 1.5em; font-weight: bold;">1</div>
+                <h4 style="color: #FFD700; margin-bottom: 10px;">Create Account</h4>
+                <p style="color: rgba(255, 255, 255, 0.7); font-size: 0.95em;">Sign up and get started</p>
+            </div>
+            <div>
+                <div style="width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 1.5em; font-weight: bold;">2</div>
+                <h4 style="color: #FFD700; margin-bottom: 10px;">Build Your Deck</h4>
+                <p style="color: rgba(255, 255, 255, 0.7); font-size: 0.95em;">Choose 40 cards strategically</p>
+            </div>
+            <div>
+                <div style="width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 1.5em; font-weight: bold;">3</div>
+                <h4 style="color: #FFD700; margin-bottom: 10px;">Find a Match</h4>
+                <p style="color: rgba(255, 255, 255, 0.7); font-size: 0.95em;">Join or create a lobby</p>
+            </div>
+            <div>
+                <div style="width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 1.5em; font-weight: bold;">4</div>
+                <h4 style="color: #FFD700; margin-bottom: 10px;">Race to Win!</h4>
+                <p style="color: rgba(255, 255, 255, 0.7); font-size: 0.95em;">Complete 8 laps first to victory</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

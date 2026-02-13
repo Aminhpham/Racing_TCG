@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block title %}{{ deck.name }} - Racing TCG{% endblock %}
+
+{% block content %}
+<div class="deck-view-container" style="max-width: 1400px; margin: 0 auto; padding: 40px 20px;">
+    <div style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%); border: 2px solid rgba(102, 126, 234, 0.5); border-radius: 12px; padding: 30px; margin-bottom: 40px;">
+        <div style="display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap; gap: 20px;">
+            <div>
+                <h1 style="margin: 0 0 10px 0; color: #FFD700;">{{ deck.name }}</h1>
+                {% if deck.description %}
+                <p style="color: rgba(255, 255, 255, 0.8); margin: 0; line-height: 1.6;">{{ deck.description }}</p>
+                {% else %}
+                <p style="color: rgba(255, 255, 255, 0.5); margin: 0; font-style: italic;">No description</p>
+                {% endif %}
+            </div>
+            <div style="text-align: right;">
+                <div style="font-size: 2em; color: #FFD700; font-weight: bold;">{{ cards|length }}/40</div>
+                <div style="font-size: 0.9em; margin-top: 5px;">
+                    {% if cards|length == 40 %}
+                    <span style="color: #4CAF50;">✓ Ready to play</span>
+                    {% elif cards|length > 40 %}
+                    <span style="color: #f44336;">⚠ Too many cards ({{ cards|length - 40 }} over)</span>
+                    {% elif cards|length > 0 %}
+                    <span style="color: #FF9800;">{{ 40 - cards|length }} cards needed</span>
+                    {% else %}
+                    <span style="color: #f44336;">Empty deck</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if cards %}
+    <div style="margin-bottom: 40px;">
+        <h2 style="color: rgba(255, 255, 255, 0.9); margin-bottom: 20px;">Deck Contents</h2>
+
+        {% set car_cards = cards | selectattr('card_type', 'equalto', 'car') | list %}
+        {% set strategy_cards = cards | selectattr('card_type', 'equalto', 'strategy') | list %}
+        {% set tactics_cards = cards | selectattr('card_type', 'equalto', 'tactics') | list %}
+        {% set event_cards = cards | selectattr('card_type', 'equalto', 'event') | list %}
+
+        {% if car_cards %}
+        <section style="margin-bottom: 30px;">
+            <h3 style="color: #FFD700; border-bottom: 2px solid #FFD700; padding-bottom: 10px; margin-bottom: 15px;">🏎️ Cars ({{ car_cards|length }})</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px;">
+                {% for card in car_cards %}
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+                    <h4 style="margin-top: 0; color: #FFD700;">{{ card.name }}</h4>
+                    <p style="font-size: 0.9em; opacity: 0.9;">{{ card.description }}</p>
+                    {% if card.stats %}
+                    <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.2);">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.85em;">
+                            <div>Engine: {{ card.stats.engine }}</div>
+                            <div>Tires: {{ card.stats.tires }}</div>
+                            <div>Fuel: {{ card.stats.fuel }}</div>
+                            <div>Reliability: {{ card.stats.reliability }}+</div>
+                        </div>
+                        {% if card.stats.ability %}
+                        <div style="margin-top: 10px; font-style: italic; color: #FFD700; font-size: 0.85em;">{{ card.stats.ability }}</div>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+        {% if strategy_cards %}
+        <section style="margin-bottom: 30px;">
+            <h3 style="color: #4CAF50; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; margin-bottom: 15px;">⚡ Strategy Cards ({{ strategy_cards|length }})</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px;">
+                {% for card in strategy_cards %}
+                <div style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); border-radius: 10px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+                    <h4 style="margin-top: 0;">{{ card.name }}</h4>
+                    <p style="font-size: 0.9em; opacity: 0.9;">{{ card.description }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+        {% if tactics_cards %}
+        <section style="margin-bottom: 30px;">
+            <h3 style="color: #2196F3; border-bottom: 2px solid #2196F3; padding-bottom: 10px; margin-bottom: 15px;">🎯 Tactics Cards ({{ tactics_cards|length }})</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px;">
+                {% for card in tactics_cards %}
+                <div style="background: linear-gradient(135deg, #3a7bd5 0%, #3a6073 100%); border-radius: 10px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+                    <h4 style="margin-top: 0;">{{ card.name }}</h4>
+                    <p style="font-size: 0.9em; opacity: 0.9;">{{ card.description }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+        {% if event_cards %}
+        <section style="margin-bottom: 30px;">
+            <h3 style="color: #FF9800; border-bottom: 2px solid #FF9800; padding-bottom: 10px; margin-bottom: 15px;">⚠️ Event Cards ({{ event_cards|length }})</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px;">
+                {% for card in event_cards %}
+                <div style="background: linear-gradient(135deg, #f2994a 0%, #f2c94c 100%); border-radius: 10px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+                    <h4 style="margin-top: 0;">{{ card.name }}</h4>
+                    <p style="font-size: 0.9em; opacity: 0.9;">{{ card.description }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+    </div>
+    {% else %}
+    <div style="text-align: center; padding: 60px 20px; background: rgba(255, 255, 255, 0.05); border-radius: 12px; border: 2px dashed rgba(255, 255, 255, 0.2); margin-bottom: 40px;">
+        <div style="font-size: 4em; margin-bottom: 20px; opacity: 0.3;">🎴</div>
+        <h2 style="color: rgba(255, 255, 255, 0.7); margin-bottom: 15px;">This deck is empty</h2>
+        <p style="color: rgba(255, 255, 255, 0.5); margin-bottom: 25px;">Add cards from your collection to build your deck.</p>
+        <a href="{{ url_for('decks.edit', deck_id=deck.id) }}" class="btn" style="display: inline-block; padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">Add Cards to Deck</a>
+    </div>
+    {% endif %}
+
+    <div style="text-align: center; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+        <a href="{{ url_for('decks.index') }}" class="btn" style="display: inline-block; padding: 12px 24px; background: rgba(255, 255, 255, 0.1); color: white; text-decoration: none; border-radius: 5px;">← Back to Decks</a>
+        <a href="{{ url_for('decks.edit', deck_id=deck.id) }}" class="btn" style="display: inline-block; padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">✏️ Edit Deck</a>
+        {% if cards|length == 40 %}
+        <a href="{{ url_for('matchmaking.lobby_browser') }}" class="btn" style="display: inline-block; padding: 12px 24px; background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%); color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">Play with This Deck</a>
+        {% endif %}
+        <button onclick="confirmDelete()" class="btn" style="display: inline-block; padding: 12px 24px; background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%); color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">🗑️ Delete Deck</button>
+    </div>
+</div>
+
+<form id="delete-form" action="{{ url_for('decks.delete', deck_id=deck.id) }}" method="POST" style="display: none;"></form>
+
+<script>
+function confirmDelete() {
+    if (confirm('Are you sure you want to delete "{{ deck.name }}"? This action cannot be undone.')) {
+        document.getElementById('delete-form').submit();
+    }
+}
+</script>
+
+{% endblock %}
+</div>
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Card Collection - Racing TCG{% endblock %}
+
+{% block content %}
+<div class="cards-container" style="max-width: 1400px; margin: 0 auto; padding: 40px 20px;">
+    <h1 style="text-align: center; margin-bottom: 40px;">📋 Card Collection</h1>
+
+    {% if car_cards %}
+    <section class="card-section">
+        <h2 style="color: #FFD700; border-bottom: 2px solid #FFD700; padding-bottom: 10px; margin: 30px 0 20px;">🏎️ Cars</h2>
+        <div class="card-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px;">
+            {% for card in car_cards %}
+            <div class="game-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+                <h3 style="margin-top: 0; color: #FFD700;">{{ card.name }}</h3>
+                <p style="font-size: 0.9em; opacity: 0.9;">{{ card.description }}</p>
+                <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.2);">
+                    {% if card.stats %}
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.85em;">
+                            <div>Engine: {{ card.stats.engine }}</div>
+                            <div>Tires: {{ card.stats.tires }}</div>
+                            <div>Fuel: {{ card.stats.fuel }}</div>
+                            <div>Reliability: {{ card.stats.reliability }}+</div>
+                        </div>
+                        {% if card.stats.ability %}
+                        <div style="margin-top: 10px; font-style: italic; color: #FFD700;">{{ card.stats.ability }}</div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    {% if strategy_cards %}
+    <section class="card-section">
+        <h2 style="color: #4CAF50; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; margin: 30px 0 20px;">⚡ Strategy Cards</h2>
+        <div class="card-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px;">
+            {% for card in strategy_cards %}
+            <div class="game-card" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); border-radius: 10px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+                <h3 style="margin-top: 0;">{{ card.name }}</h3>
+                <p style="font-size: 0.9em; opacity: 0.9;">{{ card.description }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    {% if tactics_cards %}
+    <section class="card-section">
+        <h2 style="color: #2196F3; border-bottom: 2px solid #2196F3; padding-bottom: 10px; margin: 30px 0 20px;">🎯 Tactics Cards</h2>
+        <div class="card-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px;">
+            {% for card in tactics_cards %}
+            <div class="game-card" style="background: linear-gradient(135deg, #3a7bd5 0%, #3a6073 100%); border-radius: 10px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+                <h3 style="margin-top: 0;">{{ card.name }}</h3>
+                <p style="font-size: 0.9em; opacity: 0.9;">{{ card.description }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    {% if event_cards %}
+    <section class="card-section">
+        <h2 style="color: #FF9800; border-bottom: 2px solid #FF9800; padding-bottom: 10px; margin: 30px 0 20px;">⚠️ Event Cards</h2>
+        <div class="card-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px;">
+            {% for card in event_cards %}
+            <div class="game-card" style="background: linear-gradient(135deg, #f2994a 0%, #f2c94c 100%); border-radius: 10px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+                <h3 style="margin-top: 0;">{{ card.name }}</h3>
+                <p style="font-size: 0.9em; opacity: 0.9;">{{ card.description }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    <div style="text-align: center; margin-top: 40px;">
+        <a href="{{ url_for('portal.index') }}" class="btn" style="display: inline-block; padding: 12px 24px; background: #667eea; color: white; text-decoration: none; border-radius: 5px;">Back to Portal</a>
+    </div>
+</div>
+{% endblock %}
