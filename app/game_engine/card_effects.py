@@ -43,7 +43,9 @@ def apply_strategy_card(player_state, card_data: dict) -> dict:
 
     # Apply speed modifier (stored for speed calculation)
     if "speed_modifier" in stats:
-        changes["speed_modifier"] = stats["speed_modifier"]
+        speed_mod = stats["speed_modifier"]
+        player_state.speed_modifier = speed_mod
+        changes["speed_modifier"] = speed_mod
 
     # Apply engine wear
     if "engine_wear" in stats:

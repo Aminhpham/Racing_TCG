@@ -192,13 +192,19 @@ class GameRoom:
             "results": results
         })
 
-        # Check for lap completion (handle multiple laps if needed)
+        # Check for lap completion (limit to 1 lap per turn)
         for player_id in [self.player1_id, self.player2_id]:
             player_state = self.player_states[player_id]
             laps_completed = []
-            while player_state.lap_progress >= 10:
+            # Only allow ONE lap completion per turn
+            if player_state.lap_progress >= 10:
                 lap_result = self.handle_lap_completion(player_id)
                 laps_completed.append(lap_result)
+
+                # Cap overflow at 9 to prevent multiple lap completions
+                if player_state.lap_progress >= 10:
+                    player_state.lap_progress = 9
+
             if laps_completed:
                 results[f"{player_id}_lap_completion"] = laps_completed
 
@@ -321,6 +327,9 @@ class GameRoom:
 
             # Reset played tactics
             player_state.played_tactics_this_turn = []
+
+            # Reset speed modifier from previous turn's strategy card
+            player_state.speed_modifier = 0
 
             # Update limp mode
             if player_state.in_limp_mode:

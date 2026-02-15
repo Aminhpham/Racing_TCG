@@ -173,22 +173,16 @@ def register_events(socketio):
             for pid in [game_room.player1_id, game_room.player2_id]:
                 player_state = game_room.player_states[pid]
                 if f"{pid}_lap_completion" in speed_results:
-                    # Handle multiple lap completions
+                    # Handle single lap completion (max 1 per turn)
                     laps_data = speed_results[f"{pid}_lap_completion"]
-                    if isinstance(laps_data, list):
-                        for lap_result in laps_data:
-                            socketio.emit('lap_completed', {
-                                'player_id': pid,
-                                'lap': lap_result['lap'],
-                                'completion_data': lap_result
-                            }, room=f"game_{game_room.match_id}")
-                    else:
-                        # Backwards compatibility with old single-lap format
+                    if laps_data:
+                        lap_result = (laps_data[0] if isinstance(laps_data, list)
+                                      else laps_data)
                         socketio.emit(
                             'lap_completed', {
                                 'player_id': pid,
                                 'lap': player_state.current_lap,
-                                'completion_data': laps_data
+                                'completion_data': lap_result
                             }, room=f"game_{game_room.match_id}")
 
             # Check for game over

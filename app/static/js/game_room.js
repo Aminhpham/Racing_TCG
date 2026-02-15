@@ -185,6 +185,7 @@ class GameRoomClient {
         document.getElementById(`${prefix}-tires`).textContent = playerState.car_stats.tires;
         document.getElementById(`${prefix}-fuel`).textContent = playerState.car_stats.fuel;
         document.getElementById(`${prefix}-reliability`).textContent = playerState.car_stats.reliability;
+        document.getElementById(`${prefix}-speed`).textContent = playerState.current_speed || 0;
 
         // Update lap progress
         document.getElementById(`${prefix}-lap`).textContent = playerState.current_lap;

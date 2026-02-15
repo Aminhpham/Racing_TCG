@@ -22,6 +22,7 @@ class PlayerState:
         self.current_lap = 1
         self.lap_progress = 0  # 0-10 per lap
         self.is_leader = False
+        self.current_speed = 0  # Calculated during speed phase
 
         # Deck management
         self.deck = deck_card_ids.copy()
@@ -45,6 +46,9 @@ class PlayerState:
         # Temporary phase data
         self.selected_strategy_card = None
         self.played_tactics_this_turn = []
+
+        # Speed modifier from strategy card (resets each turn)
+        self.speed_modifier = 0
 
     def draw_cards(self, count: int):
         """Draw cards from deck to hand"""
@@ -106,6 +110,7 @@ class PlayerState:
             "car_ability": self.car_ability,
             "current_lap": self.current_lap,
             "lap_progress": self.lap_progress,
+            "current_speed": self.current_speed,
             "is_leader": self.is_leader,
             "hand_size": len(self.hand),
             "deck_size": len(self.deck),
@@ -139,10 +144,14 @@ class PlayerState:
         return [
             {
                 "id": card_id,
-                "name": card_dict[card_id].name if card_id in card_dict else f"Unknown Card",
-                "card_type": card_dict[card_id].card_type if card_id in card_dict else "unknown",
-                "description": card_dict[card_id].description if card_id in card_dict else "",
-                "stats": card_dict[card_id].stats if card_id in card_dict else {}
+                "name": (card_dict[card_id].name if card_id in card_dict
+                         else "Unknown Card"),
+                "card_type": (card_dict[card_id].card_type
+                              if card_id in card_dict else "unknown"),
+                "description": (card_dict[card_id].description
+                                if card_id in card_dict else ""),
+                "stats": (card_dict[card_id].stats
+                          if card_id in card_dict else {})
             }
             for card_id in card_ids
         ]

@@ -12,7 +12,8 @@ def calculate_speed_phase(game_room) -> Dict:
         tires = player_state.car_stats["tires"]
         fuel = player_state.car_stats["fuel"]
 
-        base_speed = engine + tires + fuel
+        # Base speed is capped at 5 (before modifiers)
+        base_speed = min(5, engine + tires + fuel)
 
         # Apply limp mode penalty
         if player_state.in_limp_mode:
@@ -21,8 +22,14 @@ def calculate_speed_phase(game_room) -> Dict:
         # Slipstream bonus (trailing player)
         slipstream = calculate_slipstream(game_room, player_id)
 
+        # Apply speed modifier from strategy card
+        speed_modifier = player_state.speed_modifier
+
         # Total movement
-        total_movement = max(0, base_speed + slipstream)
+        total_movement = max(0, base_speed + slipstream + speed_modifier)
+
+        # Store current speed for UI display
+        player_state.current_speed = total_movement
 
         # Update lap progress
         old_progress = player_state.lap_progress
@@ -59,8 +66,10 @@ def calculate_slipstream(game_room, player_id: int) -> int:
     opponent_state = game_room.player_states[opponent_id]
 
     # Calculate total progress for both players
-    player_total = player_state.current_lap * 10 + player_state.lap_progress
-    opponent_total = opponent_state.current_lap * 10 + opponent_state.lap_progress
+    player_total = (player_state.current_lap * 10 +
+                    player_state.lap_progress)
+    opponent_total = (opponent_state.current_lap * 10 +
+                      opponent_state.lap_progress)
 
     # If trailing
     if player_total < opponent_total:
@@ -95,7 +104,10 @@ def update_leader_status(game_room):
 def perform_reliability_check(player_state) -> Dict:
     """Perform reliability check when stats are at 0"""
     # Find which stats are at 0
-    stats_at_zero = [stat for stat, value in player_state.car_stats.items() if value <= 0]
+    stats_at_zero = [
+        stat for stat, value in player_state.car_stats.items()
+        if value <= 0
+    ]
 
     if not stats_at_zero or player_state.car_stats["reliability"] <= 0:
         # Auto-fail if reliability is 0
