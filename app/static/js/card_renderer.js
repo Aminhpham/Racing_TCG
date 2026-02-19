@@ -22,6 +22,11 @@ class CardRenderer {
     static formatCardStats(stats) {
         const lines = [];
 
+        // Show base_speed for car cards (prominently)
+        if (stats.base_speed !== undefined) {
+            lines.push(`<div class="stat-line highlight">⚡ Base Speed: ${stats.base_speed}</div>`);
+        }
+
         if (stats.speed_modifier) {
             lines.push(`<div class="stat-line">Speed: +${stats.speed_modifier}</div>`);
         }
@@ -41,6 +46,11 @@ class CardRenderer {
                 lines.push(`<div class="stat-line">${stat}: ${sign}${stats[stat]}</div>`);
             }
         });
+
+        // Show ability if present
+        if (stats.ability) {
+            lines.push(`<div class="stat-line ability">${stats.ability}</div>`);
+        }
 
         return lines.join('') || '<div class="stat-line">No stats</div>';
     }

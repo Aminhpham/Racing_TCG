@@ -21,7 +21,8 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
     login_manager.init_app(app)
-    socketio.init_app(app, cors_allowed_origins="*", async_mode='threading', manage_session=False)
+    # async_mode auto-detects: threading locally, eventlet with gunicorn -k eventlet
+    socketio.init_app(app, cors_allowed_origins="*", manage_session=False)
 
     # Register blueprints
     from app.routes.auth import auth_bp

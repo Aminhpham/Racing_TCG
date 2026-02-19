@@ -50,6 +50,10 @@ class GameRoomClient {
             this.showSpeedResults(data);
         });
 
+        this.socket.on('dice_roll_result', (data) => {
+            this.showDiceRollResults(data);
+        });
+
         this.socket.on('lap_completed', (data) => {
             this.showLapCompleted(data);
         });
@@ -379,6 +383,54 @@ class GameRoomClient {
                 this.addLogMessage(`Reliability Check: Roll ${check.roll} vs ${check.threshold} - ${result}`, check.success ? 'success' : 'danger');
             }
         }
+    }
+
+    showDiceRollResults(data) {
+        const overlay = document.getElementById('dice-roll-overlay');
+        const yourId = this.gameState?.your_state?.player_id;
+
+        // Find opponent ID
+        const opponentId = Object.keys(data).find(id => parseInt(id) !== yourId);
+
+        // Populate your dice roll
+        const yourData = data[yourId];
+        if (yourData) {
+            document.getElementById('player-roll').textContent = yourData.roll;
+            document.getElementById('player-threshold').textContent = yourData.threshold;
+
+            const resultEl = document.getElementById('player-dice-result');
+            if (yourData.success) {
+                resultEl.textContent = `✅ Success! Moving ${yourData.movement} spaces`;
+                resultEl.className = 'dice-result success';
+            } else {
+                resultEl.textContent = '❌ Failed! No movement';
+                resultEl.className = 'dice-result failure';
+            }
+        }
+
+        // Populate opponent dice roll
+        const oppData = data[opponentId];
+        if (oppData) {
+            document.getElementById('opp-roll').textContent = oppData.roll;
+            document.getElementById('opp-threshold').textContent = oppData.threshold;
+
+            const resultEl = document.getElementById('opp-dice-result');
+            if (oppData.success) {
+                resultEl.textContent = `✅ Success! Moving ${oppData.movement} spaces`;
+                resultEl.className = 'dice-result success';
+            } else {
+                resultEl.textContent = '❌ Failed! No movement';
+                resultEl.className = 'dice-result failure';
+            }
+        }
+
+        // Show overlay
+        overlay.style.display = 'flex';
+
+        // Auto-hide after 4 seconds
+        setTimeout(() => {
+            overlay.style.display = 'none';
+        }, 4000);
     }
 
     showLapCompleted(data) {

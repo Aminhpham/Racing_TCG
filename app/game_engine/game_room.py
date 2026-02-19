@@ -331,6 +331,10 @@ class GameRoom:
             # Reset speed modifier from previous turn's strategy card
             player_state.speed_modifier = 0
 
+            # Reset current_speed to base_speed (removes all temporary modifiers)
+            player_state.current_speed = player_state.car_stats.get(
+                "base_speed", 3)
+
             # Update limp mode
             if player_state.in_limp_mode:
                 player_state.limp_mode_turns += 1

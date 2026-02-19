@@ -118,13 +118,14 @@ def register_events(socketio):
         manager = GameManager()
         host_deck = Deck.query.get(lobby.host_deck_id)
 
-        # TODO: Get car data for both players (for now use default)
+        # TODO: Get car data for both players (for now use default balanced car)
         default_car = {
-            "engine": 8,
+            "base_speed": 4,
+            "engine": 7,
             "tires": 6,
             "fuel": 6,
-            "reliability": 3,
-            "ability": ""
+            "reliability": 4,
+            "ability": "Balanced performance"
         }
 
         game_room = manager.create_game(

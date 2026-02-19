@@ -169,6 +169,20 @@ def register_events(socketio):
                 'speed_phase_results', speed_results,
                 room=f"game_{game_room.match_id}")
 
+            # Emit dice roll results for UI display
+            dice_rolls = {
+                pid: {
+                    'roll': speed_results[pid]['roll'],
+                    'threshold': speed_results[pid]['reliability_threshold'],
+                    'success': speed_results[pid]['success'],
+                    'movement': speed_results[pid]['total_movement']
+                }
+                for pid in [game_room.player1_id, game_room.player2_id]
+            }
+            socketio.emit(
+                'dice_roll_result', dice_rolls,
+                room=f"game_{game_room.match_id}")
+
             # Check for lap completion
             for pid in [game_room.player1_id, game_room.player2_id]:
                 player_state = game_room.player_states[pid]

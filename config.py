@@ -2,17 +2,19 @@ import os
 
 
 class Config:
-    SECRET_KEY = os.environ.get("SECRET_KEY", "dev")
+    SECRET_KEY = os.environ.get("SECRET_KEY", "change-me-in-production")
 
-    # PostgreSQL connection string
-    SQLALCHEMY_DATABASE_URI = os.environ.get(
-        "DATABASE_URL",
-        "postgresql://Minh:Audifan1996%40@localhost:5432/racing_tcg"
-    )
+    # Database — set DATABASE_URL env var in production (Render sets this automatically)
+    _db_url = os.environ.get("DATABASE_URL", "sqlite:///dev.db")
+
+    # Fix old postgres:// prefix (Render/Heroku may use this format)
+    if _db_url.startswith("postgres://"):
+        _db_url = _db_url.replace("postgres://", "postgresql://", 1)
+
+    SQLALCHEMY_DATABASE_URI = _db_url
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    # SocketIO configuration
-    SOCKETIO_ASYNC_MODE = 'threading'
+    # SocketIO configuration (async_mode auto-detected)
     SOCKETIO_PING_TIMEOUT = 60
     SOCKETIO_PING_INTERVAL = 25

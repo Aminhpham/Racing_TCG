@@ -3,54 +3,51 @@ from typing import Dict
 
 
 def calculate_speed_phase(game_room) -> Dict:
-    """Calculate movement and wear for both players"""
+    """Calculate movement with dice roll reliability check"""
     results = {}
 
     for player_id, player_state in game_room.player_states.items():
-        # Calculate base speed from car stats
-        engine = player_state.car_stats["engine"]
-        tires = player_state.car_stats["tires"]
-        fuel = player_state.car_stats["fuel"]
+        # Step 1: Roll d6 for reliability check
+        roll = random.randint(1, 6)
+        reliability = player_state.car_stats["reliability"]
 
-        # Base speed is capped at 5 (before modifiers)
-        base_speed = min(5, engine + tires + fuel)
+        # Step 2: Check if player passes reliability threshold
+        success = roll >= reliability
 
-        # Apply limp mode penalty
-        if player_state.in_limp_mode:
-            base_speed -= 1
+        # Step 3: Calculate movement speed only if roll succeeds
+        if success:
+            # Slipstream bonus (trailing player)
+            slipstream = calculate_slipstream(game_room, player_id)
 
-        # Slipstream bonus (trailing player)
-        slipstream = calculate_slipstream(game_room, player_id)
+            # Use current_speed (base_speed + card modifiers)
+            movement_speed = player_state.current_speed
 
-        # Apply speed modifier from strategy card
-        speed_modifier = player_state.speed_modifier
+            # Apply limp mode penalty
+            if player_state.in_limp_mode:
+                movement_speed = max(0, movement_speed - 1)
 
-        # Total movement
-        total_movement = max(0, base_speed + slipstream + speed_modifier)
+            # Total movement (speed + slipstream)
+            total_movement = max(0, movement_speed + slipstream)
+        else:
+            # Failed roll = no movement
+            total_movement = 0
+            slipstream = 0
 
-        # Store current speed for UI display
-        player_state.current_speed = total_movement
-
-        # Update lap progress
+        # Step 4: Update lap progress
         old_progress = player_state.lap_progress
         player_state.lap_progress += total_movement
 
-        # Calculate wear (engine wear already applied from cards)
-        # No additional wear in this simplified version
-
-        # Reliability check if any stat is at 0
-        reliability_result = None
-        if any(value <= 0 for value in [engine, tires, fuel]):
-            reliability_result = perform_reliability_check(player_state)
-
+        # Store results for broadcasting (including dice roll)
         results[player_id] = {
-            "base_speed": base_speed,
+            "roll": roll,
+            "reliability_threshold": reliability,
+            "success": success,
+            "movement_speed": player_state.current_speed,
             "slipstream": slipstream,
             "total_movement": total_movement,
             "old_progress": old_progress,
             "new_progress": player_state.lap_progress,
-            "current_lap": player_state.current_lap,
-            "reliability_check": reliability_result
+            "current_lap": player_state.current_lap
         }
 
     # Update leader status

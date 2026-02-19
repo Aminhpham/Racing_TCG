@@ -148,6 +148,27 @@
             <p class="reveal-continue">Starting React Phase...</p>
         </div>
     </div>
+
+    <!-- Dice Roll Overlay -->
+    <div id="dice-roll-overlay" class="overlay" style="display: none;">
+        <div class="dice-content">
+            <h2>🎲 Reliability Check!</h2>
+            <div class="dice-results">
+                <div class="player-dice">
+                    <h3>You</h3>
+                    <div class="dice-display">🎲 <span id="player-roll">?</span></div>
+                    <p>Need: <span id="player-threshold">?</span>+</p>
+                    <p class="dice-result" id="player-dice-result">Rolling...</p>
+                </div>
+                <div class="opponent-dice">
+                    <h3>Opponent</h3>
+                    <div class="dice-display">🎲 <span id="opp-roll">?</span></div>
+                    <p>Need: <span id="opp-threshold">?</span>+</p>
+                    <p class="dice-result" id="opp-dice-result">Rolling...</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="{{ url_for('static', filename='js/socketio.min.js') }}"></script>

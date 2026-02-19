@@ -9,6 +9,7 @@ class PlayerState:
 
         # Car stats (initialized from car_data)
         self.car_stats = {
+            "base_speed": car_data.get("base_speed", 3),
             "engine": car_data.get("engine", 8),
             "tires": car_data.get("tires", 6),
             "fuel": car_data.get("fuel", 6),
@@ -22,7 +23,8 @@ class PlayerState:
         self.current_lap = 1
         self.lap_progress = 0  # 0-10 per lap
         self.is_leader = False
-        self.current_speed = 0  # Calculated during speed phase
+        # Initialize current_speed from base_speed (modified by cards each turn)
+        self.current_speed = car_data.get("base_speed", 3)
 
         # Deck management
         self.deck = deck_card_ids.copy()
